@@ -6,7 +6,11 @@ module Lita
       route /^storenum (.+)$/i, :lookup_store, command: true
 
       def lookup_store(response)
-        response.reply 'x'
+        possibilities = []
+        f = File.open('stores.dat').each do |line|
+          possibilities.push line if line.match /#{response.matches[0][0]}/i
+        end
+        response.reply possibilities.join ', '
       end
 
       Lita.register_handler(self)
